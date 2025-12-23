@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Báo cáo Kế toán Tài chính - Mockup</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -227,6 +228,10 @@
             height: 220px;
         }
 
+        .chart.medium {
+            height: 280px;
+        }
+
         .chart.large {
             height: 360px;
         }
@@ -265,6 +270,45 @@
             color: var(--muted);
         }
 
+        /* Layout riêng cho BC1.2 */
+        .layout-1-2-top {
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+            gap: 24px;
+            margin-bottom: 28px;
+            align-items: stretch;
+        }
+
+        .layout-1-2-top .kpi-panel {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 18px 18px 4px;
+        }
+
+        .layout-1-2-top .kpi-row {
+            margin-bottom: 0;
+        }
+
+        .layout-1-2-top .chart-box {
+            height: 100%;
+        }
+
+        .section-block.section-1-2-decomp .chart-box .chart.small {
+            height: 420px;
+        }
+
+        .layout-1-2-top .chart {
+            height: 220px;
+        }
+
+        @media (max-width: 1200px) {
+            .layout-1-2-top {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Table */
         .data-table {
             width: 100%;
@@ -288,6 +332,52 @@
 
         .data-table tr:hover {
             background: #f8fafc;
+        }
+
+        /* Bảng cân đối kế toán đẹp hơn */
+        .balance-summary h3 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 15px;
+        }
+
+        .balance-summary h3::after {
+            content: 'Tính theo tỷ đồng';
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .balance-summary .data-table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .balance-summary .data-table th {
+            background: linear-gradient(90deg, #e0f2fe, #eef2ff);
+            color: #1e3a8a;
+        }
+
+        .balance-summary .data-table tbody tr:nth-child(odd) {
+            background: #f9fafb;
+        }
+
+        .balance-summary .data-table tbody tr:nth-child(even) {
+            background: #ffffff;
+        }
+
+        .balance-summary .data-table tbody tr td[style*="font-weight: 600"] {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .balance-summary .data-table tbody tr td[style*="padding-left: 20px;"] {
+            color: #0f172a;
+        }
+
+        .balance-summary .data-table tbody tr td[style*="padding-left: 40px;"] {
+            color: #334155;
         }
 
         /* Badge */
@@ -363,8 +453,8 @@
         <div class="report-group">
             <div class="report-title">BC1: Tổng quan Tài chính</div>
             <div class="nav-item active" data-page="page-1-1">1.1 Dashboard Tổng quan</div>
-            <div class="nav-item" data-page="page-1-2">1.2 Bảng Cân đối Kế toán</div>
-            <div class="nav-item" data-page="page-1-3">1.3 Các Tỷ số Tài chính</div>
+            <div class="nav-item" data-page="page-1-2">1.2 Khả năng thanh toán</div>
+            <div class="nav-item" data-page="page-1-3">1.3 Bảng Cân đối Kế toán</div>
         </div>
 
         <div class="report-group">
@@ -388,8 +478,7 @@
             <!-- Page 1.1 -->
             <div id="page-1-1" class="page active">
                 <div class="page-header">
-                    <h1>BC1.1 Dashboard Tổng quan tài chính</h1>
-                    <p>Tập trung KPI thanh khoản, tài sản và nghĩa vụ cốt lõi</p>
+                    <h1>BC1.1 Tổng quan tài chính</h1>
                 </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
@@ -429,18 +518,17 @@
                         <div id="chart-1-1-trend" class="chart"></div>
                     </div>
                     <div class="chart-box">
-                        <h3>Current Ratio</h3>
+                        <h3>Hệ số thanh toán hiện hành</h3>
                         <div id="chart-1-1-gauge-current" class="chart small"></div>
                     </div>
                     <div class="chart-box">
-                        <h3>Debt/Equity Ratio</h3>
+                        <h3>Tỷ lệ Nợ/Vốn chủ</h3>
                         <div id="chart-1-1-gauge-de" class="chart small"></div>
                     </div>
                 </div>
-                <div class="section-block">
+                <div class="section-block section-1-1-drill">
                     <div class="section-heading">
-                        <h2>Drill-down tiền & nợ</h2>
-                        <p>Mở rộng bằng biểu đồ, bỏ toàn bộ cảnh báo dạng text</p>
+                        <h2>Chi tiết tiền & nợ</h2>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
@@ -459,84 +547,122 @@
                 </div>
             </div>
 
-            <!-- Page 1.2 -->
+            <!-- Page 1.2 (Khả năng thanh toán - trước đây 1.3) -->
             <div id="page-1-2" class="page">
                 <div class="page-header">
-                    <h1>BC1.2 Bảng Cân đối Kế toán</h1>
-                    <p>Phân rã tài sản - nguồn vốn và các bảng drill-down chi tiết</p>
+                    <h1>BC1.2 Khả năng thanh toán</h1>
                 </div>
                 <div class="chart-row auto">
                     <div class="chart-box">
-                        <h3>Cơ cấu Tài sản</h3>
-                        <div id="chart-1-2-asset" class="chart"></div>
+                        <h3>Hệ số thanh toán hiện hành</h3>
+                        <div id="chart-1-3-g1" class="chart tiny"></div>
                     </div>
                     <div class="chart-box">
-                        <h3>Cơ cấu Nguồn vốn</h3>
-                        <div id="chart-1-2-equity" class="chart"></div>
+                        <h3>Hệ số thanh toán nhanh</h3>
+                        <div id="chart-1-3-g2" class="chart tiny"></div>
                     </div>
                     <div class="chart-box">
-                        <h3>Cơ cấu % TSNH vs TSDH</h3>
-                        <div id="chart-1-2-pie1" class="chart small"></div>
+                        <h3>Hệ số thanh toán bằng tiền</h3>
+                        <div id="chart-1-3-g4" class="chart tiny"></div>
                     </div>
                     <div class="chart-box">
-                        <h3>Cơ cấu % Nợ vs VCSH</h3>
-                        <div id="chart-1-2-pie2" class="chart small"></div>
+                        <h3>Tỷ lệ Nợ/Vốn chủ sở hữu</h3>
+                        <div id="chart-1-3-g3" class="chart tiny"></div>
+                    </div>
+                    <div class="chart-box">
+                        <h3>Khả năng thanh toán lãi vay</h3>
+                        <div id="chart-1-3-g5" class="chart tiny"></div>
                     </div>
                 </div>
-
                 <div class="section-block">
                     <div class="section-heading">
-                        <h2>Drill-down Nợ phải trả</h2>
-                        <p>Theo dõi theo kỳ hạn, nguồn vay và xu hướng 12T</p>
+                        <h2>Giải thích các tỷ số</h2>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
-                            <h3>Nợ NH vs Nợ DH (12 tháng)</h3>
-                            <div id="chart-1-2-drill-stack1" class="chart small"></div>
+                            <h3>TSNH vs Nợ NH + Hệ số hiện hành</h3>
+                            <div id="chart-1-3-drill-combo1" class="chart small"></div>
                         </div>
                         <div class="chart-box">
-                            <h3>Cơ cấu Nợ Ngắn hạn</h3>
-                            <div id="chart-1-2-drill-donut1" class="chart small"></div>
+                            <h3>(TSNH - HTK) vs Nợ NH + Hệ số nhanh</h3>
+                            <div id="chart-1-3-drill-combo2" class="chart small"></div>
                         </div>
                         <div class="chart-box">
-                            <h3>Nợ NH theo Thời hạn</h3>
-                            <div id="chart-1-2-drill-bar1" class="chart small"></div>
-                        </div>
-                        <div class="chart-box">
-                            <h3>Nợ Vay theo Nguồn</h3>
-                            <div id="chart-1-2-drill-bar2" class="chart small"></div>
+                            <h3>Tiền vs Nợ NH + Hệ số tiền mặt</h3>
+                            <div id="chart-1-3-drill-combo3" class="chart small"></div>
                         </div>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
-                            <h3>Trend Nợ vay 12 tháng</h3>
-                            <div id="chart-1-2-drill-line" class="chart small"></div>
+                            <h3>Nợ vs VCSH + Tỷ lệ Nợ/Vốn CSH</h3>
+                            <div id="chart-1-3-drill-de" class="chart small"></div>
+                        </div>
+                        <div class="chart-box">
+                            <h3>LN trước lãi vs Chi phí lãi + Khả năng trả lãi</h3>
+                            <div id="chart-1-3-drill-interest" class="chart small"></div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- Page 1.3 (Bảng Cân đối Kế toán - trước đây 1.2) -->
+            <div id="page-1-3" class="page">
+                <div class="page-header">
+                    <h1>BC1.3 Bảng Cân đối Kế toán</h1>
+                </div>
+                <!-- Phần 1: KPI + Line/Bar -->
+                <div class="layout-1-2-top">
+                    <div class="kpi-panel">
+                        <div class="kpi-row">
+                            <div class="kpi-card">
+                                <div class="label">Tài sản ngắn hạn</div>
+                                <div class="value">55.0 tỷ</div>
+                                <div class="change up">+3.0 tỷ vs quý trước</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="label">Tài sản dài hạn</div>
+                                <div class="value">73.5 tỷ</div>
+                                <div class="change up">+2.5 tỷ vs quý trước</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="label">Nợ phải trả</div>
+                                <div class="value">45.6 tỷ</div>
+                                <div class="change up">+1.1 tỷ vs quý trước</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="label">Vốn chủ sở hữu</div>
+                                <div class="value">82.9 tỷ</div>
+                                <div class="change up">+4.4 tỷ vs quý trước</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <h3>Tổng tài sản & so với cùng kỳ</h3>
+                        <div id="chart-1-2-total-linebar" class="chart"></div>
+                    </div>
+                </div>
 
-                <div class="section-block">
+                <!-- Phần 2: Decomposition charts -->
+                <div class="section-block section-1-2-decomp">
                     <div class="section-heading">
-                        <h2>Drill-down Tài sản</h2>
-                        <p>Hiển thị TSNH, TSCĐ theo loại và khoản đầu tư mới</p>
+                        <h2>Phân rã cơ cấu Tài sản - Nguồn vốn</h2>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
-                            <h3>TSNH theo Thành phần (12T)</h3>
-                            <div id="chart-1-2-drill-stack2" class="chart small"></div>
+                            <h3>Phân rã Tổng tài sản</h3>
+                            <div id="chart-1-2-decomp-asset" class="chart small"></div>
                         </div>
                         <div class="chart-box">
-                            <h3>TSCĐ theo Loại</h3>
-                            <div id="chart-1-2-drill-bar3" class="chart small"></div>
+                            <h3>Phân rã Nợ phải trả</h3>
+                            <div id="chart-1-2-decomp-liab" class="chart small"></div>
                         </div>
                         <div class="chart-box">
-                            <h3>TSCĐ Mới mua trong kỳ</h3>
-                            <div id="chart-1-2-drill-bar4" class="chart small"></div>
+                            <h3>Phân rã Vốn chủ sở hữu</h3>
+                            <div id="chart-1-2-decomp-equity" class="chart small"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="chart-box">
+                <div class="chart-box balance-summary">
                     <h3>Bảng cân đối tóm tắt</h3>
                     <table class="data-table">
                         <thead>
@@ -559,6 +685,30 @@
                                 <td>55.0 tỷ</td>
                                 <td>52.0 tỷ</td>
                                 <td>45.0 tỷ</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 40px;">Tiền &amp; tương đương tiền</td>
+                                <td>12.8 tỷ</td>
+                                <td>12.5 tỷ</td>
+                                <td>11.0 tỷ</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 40px;">Phải thu</td>
+                                <td>18.2 tỷ</td>
+                                <td>17.0 tỷ</td>
+                                <td>15.0 tỷ</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 40px;">Hàng tồn kho</td>
+                                <td>11.3 tỷ</td>
+                                <td>10.8 tỷ</td>
+                                <td>9.0 tỷ</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 40px;">Tài sản ngắn hạn khác</td>
+                                <td>12.7 tỷ</td>
+                                <td>11.7 tỷ</td>
+                                <td>10.0 tỷ</td>
                             </tr>
                             <tr>
                                 <td style="padding-left: 20px;">- Tài sản dài hạn</td>
@@ -594,78 +744,11 @@
                     </table>
                 </div>
             </div>
-            <!-- Page 1.3 -->
-            <div id="page-1-3" class="page">
-                <div class="page-header">
-                    <h1>BC1.3 Các Tỷ số Tài chính</h1>
-                    <p>Đánh giá khả năng thanh khoản, đòn bẩy và đáp ứng lãi vay</p>
-                </div>
-                <div class="chart-row auto">
-                    <div class="chart-box">
-                        <h3>Current Ratio</h3>
-                        <div id="chart-1-3-g1" class="chart tiny"></div>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Quick Ratio</h3>
-                        <div id="chart-1-3-g2" class="chart tiny"></div>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Cash Ratio</h3>
-                        <div id="chart-1-3-g4" class="chart tiny"></div>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Debt/Equity</h3>
-                        <div id="chart-1-3-g3" class="chart tiny"></div>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Interest Coverage</h3>
-                        <div id="chart-1-3-g5" class="chart tiny"></div>
-                    </div>
-                </div>
-                <div class="chart-row single">
-                    <div class="chart-box">
-                        <h3>Xu hướng tỷ số (12 tháng)</h3>
-                        <div id="chart-1-3-line" class="chart small"></div>
-                    </div>
-                </div>
-
-                <div class="section-block">
-                    <div class="section-heading">
-                        <h2>Drill-down biến động tỷ số</h2>
-                        <p>Liên kết giữa tài sản lưu động, nợ và chuẩn so sánh ngành</p>
-                    </div>
-                    <div class="chart-row auto">
-                        <div class="chart-box">
-                            <h3>TSNH vs Nợ NH + Current Ratio</h3>
-                            <div id="chart-1-3-drill-combo1" class="chart small"></div>
-                        </div>
-                        <div class="chart-box">
-                            <h3>(TSNH - HTK) vs Nợ NH + Quick Ratio</h3>
-                            <div id="chart-1-3-drill-combo2" class="chart small"></div>
-                        </div>
-                        <div class="chart-box">
-                            <h3>Tiền vs Nợ NH + Cash Ratio</h3>
-                            <div id="chart-1-3-drill-combo3" class="chart small"></div>
-                        </div>
-                    </div>
-                    <div class="chart-row auto">
-                        <div class="chart-box">
-                            <h3>Cấu phần TSNH</h3>
-                            <div id="chart-1-3-drill-stack" class="chart small"></div>
-                        </div>
-                        <div class="chart-box">
-                            <h3>So sánh với Ngành</h3>
-                            <div id="chart-1-3-drill-industry" class="chart small"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Page 2.1 -->
             <div id="page-2-1" class="page">
                 <div class="page-header">
-                    <h1>BC2.1 Tổng quan KQKD</h1>
-                    <p>Tóm tắt doanh thu, chi phí và lợi nhuận theo quý/12T</p>
+                    <h1>BC2.1 Tổng quan Kết quả kinh doanh</h1>
                 </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
@@ -691,7 +774,7 @@
                 </div>
                 <div class="chart-row single">
                     <div class="chart-box">
-                        <h3>Waterfall: Doanh thu → Lợi nhuận</h3>
+                        <h3>Cầu thác: Doanh thu → Lợi nhuận</h3>
                         <div id="chart-2-1-waterfall" class="chart large"></div>
                     </div>
                 </div>
@@ -701,15 +784,14 @@
                         <div id="chart-2-1-pie" class="chart"></div>
                     </div>
                     <div class="chart-box">
-                        <h3>Thực tế vs Kế hoạch (12T)</h3>
+                        <h3>Thực tế so với Kế hoạch (12 tháng)</h3>
                         <div id="chart-2-1-combo" class="chart"></div>
                     </div>
                 </div>
 
                 <div class="section-block">
                     <div class="section-heading">
-                        <h2>Drill-down Lợi nhuận</h2>
-                        <p>Kiểm soát biến động chi phí, margin và GAP kế hoạch</p>
+                        <h2>Chi tiết Lợi nhuận</h2>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
@@ -736,7 +818,6 @@
             <div id="page-2-2" class="page">
                 <div class="page-header">
                     <h1>BC2.2 Phân tích Doanh thu</h1>
-                    <p>Đa chiều theo dịch vụ, khách hàng, tuyến và loại container</p>
                 </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
@@ -773,8 +854,7 @@
 
                 <div class="section-block">
                     <div class="section-heading">
-                        <h2>Drill-down Doanh thu</h2>
-                        <p>Giải thích biến động theo dịch vụ, loại container, tuyến</p>
+                        <h2>Chi tiết Doanh thu</h2>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
@@ -817,7 +897,6 @@
             <div id="page-2-3" class="page">
                 <div class="page-header">
                     <h1>BC2.3 Phân tích Chi phí</h1>
-                    <p>Kiểm soát cơ cấu chi phí, xu hướng và nhà cung cấp trọng yếu</p>
                 </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
@@ -843,7 +922,7 @@
                 </div>
                 <div class="chart-row">
                     <div class="chart-box">
-                        <h3>Cơ cấu Chi phí (Treemap)</h3>
+                        <h3>Cơ cấu Chi phí</h3>
                         <div id="chart-2-3-treemap" class="chart large"></div>
                     </div>
                     <div class="chart-box">
@@ -854,8 +933,7 @@
 
                 <div class="section-block">
                     <div class="section-heading">
-                        <h2>Drill-down Chi phí</h2>
-                        <p>So sánh kỳ trước, cấu trúc cố định/biến đổi và hiệu quả NCC</p>
+                        <h2>Chi tiết Chi phí</h2>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
@@ -896,7 +974,6 @@
             <div id="page-2-4" class="page">
                 <div class="page-header">
                     <h1>BC2.4 Lưu chuyển Tiền tệ</h1>
-                    <p>Theo dõi tồn quỹ, dòng tiền vào/ra và chu kỳ chuyển đổi tiền</p>
                 </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
@@ -927,25 +1004,24 @@
                 </div>
                 <div class="chart-row">
                     <div class="chart-box">
-                        <h3>Waterfall: Biến động tiền</h3>
+                        <h3>Cầu thác: Biến động tiền</h3>
                         <div id="chart-2-4-waterfall" class="chart large"></div>
                     </div>
                     <div class="chart-box">
-                        <h3>Thu vs Chi (12T)</h3>
+                        <h3>Thu và Chi (12 tháng)</h3>
                         <div id="chart-2-4-column" class="chart large"></div>
                     </div>
                 </div>
                 <div class="chart-row single">
                     <div class="chart-box">
-                        <h3>Tiền tồn TM/TG với ngưỡng</h3>
+                        <h3>Tiền tồn TM/TG và ngưỡng cảnh báo</h3>
                         <div id="chart-2-4-area" class="chart large"></div>
                     </div>
                 </div>
 
                 <div class="section-block">
                     <div class="section-heading">
-                        <h2>Drill-down Dòng tiền</h2>
-                        <p>Phân tích nguồn thu, khoản chi lớn và chu kỳ chuyển đổi tiền</p>
+                        <h2>Chi tiết Dòng tiền</h2>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
@@ -988,7 +1064,6 @@
             <div id="page-3-1" class="page">
                 <div class="page-header">
                     <h1>BC3.1 Tổng quan Công nợ</h1>
-                    <p>Đi sâu tình trạng phải thu, phải trả và chu kỳ tiền mặt</p>
                 </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
@@ -1028,10 +1103,9 @@
                     </div>
 
                     <div class="section-block">
-                        <div class="section-heading">
-                            <h2>Drill-down Công nợ</h2>
-                            <p>Phân rã theo khách hàng, nhà cung cấp và cấu trúc trạng thái</p>
-                        </div>
+                    <div class="section-heading">
+                        <h2>Chi tiết Công nợ</h2>
+                    </div>
                         <div class="chart-row auto">
                             <div class="chart-box">
                                 <h3>Trend DSO (12T)</h3>
@@ -1073,7 +1147,6 @@
                 <div id="page-3-2" class="page">
                     <div class="page-header">
                         <h1>BC3.2 Chi tiết Phải thu & Phải trả</h1>
-                        <p>Drill-down theo khách hàng, hợp đồng, ưu tiên xử lý</p>
                     </div>
                     <div class="chart-row">
                         <div class="chart-box">
@@ -1087,10 +1160,9 @@
                     </div>
 
                     <div class="section-block">
-                        <div class="section-heading">
-                            <h2>Drill-down công nợ chi tiết</h2>
-                            <p>Nhận diện hợp đồng rủi ro, tuổi nợ và ưu tiên xử lý</p>
-                        </div>
+                    <div class="section-heading">
+                        <h2>Chi tiết công nợ</h2>
+                    </div>
                         <div class="chart-row auto">
                             <div class="chart-box">
                                 <h3>Trend PT từng KH (6T)</h3>
@@ -1123,7 +1195,7 @@
 
                     <div class="chart-row single">
                         <div class="chart-box">
-                            <h3>Danh sách khoản phải trả ưu tiên</h3>
+                        <h3>Danh sách khoản phải trả ưu tiên</h3>
                             <table class="data-table">
                                 <thead>
                                     <tr>
@@ -1180,7 +1252,6 @@
                 <div id="page-3-3" class="page">
                     <div class="page-header">
                         <h1>BC3.3 Phân tích Tuổi nợ (Aging)</h1>
-                        <p>Kịp thời phát hiện rủi ro nợ xấu và hiệu quả thu hồi</p>
                     </div>
                     <div class="chart-row">
                         <div class="chart-box">
@@ -1195,16 +1266,18 @@
 
 
                     <div class="section-block">
-                        <div class="section-heading">
-                            <h2>Drill-down Tuổi nợ</h2>
-                            <p>Phân tích xu hướng, khách hàng rủi ro và biến động tháng</p>
-                        </div>
+                    <div class="section-heading">
+                        <h2>Chi tiết Tuổi nợ</h2>
+                    </div>
                         <div class="chart-row auto">
                             <div class="chart-box">
                                 <h3>Trend % Quá hạn (12T)</h3>
                                 <div id="chart-3-3-drill-line" class="chart small"></div>
                             </div>
-                            
+                            <div class="chart-box">
+                                <h3>Pareto: 80/20 Nợ quá hạn</h3>
+                                <div id="chart-3-3-drill-pareto" class="chart small"></div>
+                            </div>
                             <div class="chart-box">
                                 <h3>Heatmap: KH x Aging bucket</h3>
                                 <div id="chart-3-3-drill-heatmap" class="chart small"></div>
@@ -1277,6 +1350,5 @@
 
         <script src="mockup_charts.js"></script>
 </body>
-
 
 </html>
