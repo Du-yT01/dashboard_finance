@@ -25,14 +25,22 @@ const colors = {
 
 const agingColors = ['#10b981', '#f59e0b', '#f97316', '#ef4444'];
 
+// Helper: tạo chuỗi bar mini trong label decomposition
+function decoBarLabel(name, val, maxVal) {
+    if (!maxVal || !val) return name;
+    const len = Math.max(2, Math.round((val / maxVal) * 10));
+    const bar = '▮'.repeat(len);
+    return `${name}\n${bar} ${val} tỷ`;
+}
+
 // Initialize charts on load
 document.addEventListener('DOMContentLoaded', () => initCharts('page-1-1'));
 
 function initCharts(pageId) {
     switch (pageId) {
         case 'page-1-1': initPage11(); break;
-        case 'page-1-2': initPage12(); break;
-        case 'page-1-3': initPage13(); break;
+        case 'page-1-2': initPage13(); break;
+        case 'page-1-3': initPage12(); break;
         case 'page-2-1': initPage21(); break;
         case 'page-2-2': initPage22(); break;
         case 'page-2-3': initPage23(); break;
@@ -67,7 +75,7 @@ function initPage11() {
             max: 3,
             stops: [[0.5, colors.danger], [0.7, colors.warning], [1, colors.success]],
             value: 1.8,
-            label: 'Current Ratio'
+            label: 'Hệ số thanh toán hiện hành'
         },
         {
             id: 'chart-1-1-gauge-de',
@@ -75,7 +83,7 @@ function initPage11() {
             max: 2,
             stops: [[0.3, colors.success], [0.6, colors.warning], [1, colors.danger]],
             value: 0.55,
-            label: 'D/E Ratio'
+            label: 'Tỷ lệ Nợ/Vốn chủ'
         }
     ];
 
@@ -133,57 +141,459 @@ function initPage11() {
 
 // Page 1.2 - Bảng CĐKT
 function initPage12() {
+    const assetCats = ['Đầu năm', 'Q1', 'Q2', 'Q3', 'Q4'];
+    const tsnhData = [45, 48, 50, 52, 55];
+    const tsdhData = [65, 68, 70, 72, 73.5];
+    const assetTotals = assetCats.map((_, i) => tsnhData[i] + tsdhData[i]);
+
     const el1 = document.getElementById('chart-1-2-asset');
-    if (!el1) return;
-    echarts.init(el1).setOption({
-        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-        legend: { data: ['TSNH', 'TSDH'], bottom: 0 },
-        xAxis: { type: 'category', data: ['Đầu năm', 'Q1', 'Q2', 'Q3', 'Q4'] },
-        yAxis: { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
-        series: [
-            { name: 'TSNH', type: 'bar', stack: 'total', data: [45, 48, 50, 52, 55], itemStyle: { color: colors.info } },
-            { name: 'TSDH', type: 'bar', stack: 'total', data: [65, 68, 70, 72, 73.5], itemStyle: { color: colors.primary } }
-        ]
-    });
+    if (el1) {
+        echarts.init(el1).setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            legend: { data: ['TSNH', 'TSDH'], bottom: 0 },
+            xAxis: { type: 'category', data: assetCats },
+            yAxis: { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
+            series: [
+                {
+                    name: 'TSNH',
+                    type: 'bar',
+                    stack: 'total',
+                    data: tsnhData,
+                    itemStyle: { color: colors.info },
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: (p) => {
+                            const total = assetTotals[p.dataIndex] || 0;
+                            const pct = total ? Math.round((p.value / total) * 100) : 0;
+                            return `${p.value} tỷ (${pct}%)`;
+                        }
+                    }
+                },
+                {
+                    name: 'TSDH',
+                    type: 'bar',
+                    stack: 'total',
+                    data: tsdhData,
+                    itemStyle: { color: colors.primary },
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: (p) => {
+                            const total = assetTotals[p.dataIndex] || 0;
+                            const pct = total ? Math.round((p.value / total) * 100) : 0;
+                            return `${p.value} tỷ (${pct}%)`;
+                        }
+                    }
+                }
+            ]
+        });
+    }
 
+    const debtData = [38, 40, 42, 44, 45.6];
+    const equityData = [72, 76, 78, 80, 82.9];
+    const equityTotals = assetCats.map((_, i) => debtData[i] + equityData[i]);
     const el2 = document.getElementById('chart-1-2-equity');
-    if (!el2) return;
-    echarts.init(el2).setOption({
-        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-        legend: { data: ['Nợ phải trả', 'VCSH'], bottom: 0 },
-        xAxis: { type: 'category', data: ['Đầu năm', 'Q1', 'Q2', 'Q3', 'Q4'] },
-        yAxis: { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
-        series: [
-            { name: 'Nợ phải trả', type: 'bar', stack: 'total', data: [38, 40, 42, 44, 45.6], itemStyle: { color: colors.danger } },
-            { name: 'VCSH', type: 'bar', stack: 'total', data: [72, 76, 78, 80, 82.9], itemStyle: { color: colors.success } }
-        ]
-    });
+    if (el2) {
+        echarts.init(el2).setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            legend: { data: ['Nợ phải trả', 'VCSH'], bottom: 0 },
+            xAxis: { type: 'category', data: assetCats },
+            yAxis: { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
+            series: [
+                {
+                    name: 'Nợ phải trả',
+                    type: 'bar',
+                    stack: 'total',
+                    data: debtData,
+                    itemStyle: { color: colors.danger },
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: (p) => {
+                            const total = equityTotals[p.dataIndex] || 0;
+                            const pct = total ? Math.round((p.value / total) * 100) : 0;
+                            return `${p.value} tỷ (${pct}%)`;
+                        }
+                    }
+                },
+                {
+                    name: 'VCSH',
+                    type: 'bar',
+                    stack: 'total',
+                    data: equityData,
+                    itemStyle: { color: colors.success },
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: (p) => {
+                            const total = equityTotals[p.dataIndex] || 0;
+                            const pct = total ? Math.round((p.value / total) * 100) : 0;
+                            return `${p.value} tỷ (${pct}%)`;
+                        }
+                    }
+                }
+            ]
+        });
+    }
 
-    const el3 = document.getElementById('chart-1-2-pie1');
-    if (!el3) return;
-    echarts.init(el3).setOption({
+    const tsnhPie = document.getElementById('chart-1-2-tsnh');
+    if (tsnhPie) echarts.init(tsnhPie).setOption({
         tooltip: { trigger: 'item' },
         series: [{
-            type: 'pie', radius: ['40%', '70%'], label: { formatter: '{b}: {d}%' },
+            type: 'pie',
+            radius: ['40%', '70%'],
+            label: { formatter: '{b}: {d}%' },
             data: [
-                { value: 55, name: 'TSNH', itemStyle: { color: colors.info } },
-                { value: 73.5, name: 'TSDH', itemStyle: { color: colors.primary } }
+                { value: 12.8, name: 'Tiền & tương đương tiền' },
+                { value: 18.2, name: 'Phải thu' },
+                { value: 11.3, name: 'Hàng tồn kho' },
+                { value: 12.7, name: 'Tài sản ngắn hạn khác' }
             ]
         }]
     });
 
-    const el4 = document.getElementById('chart-1-2-pie2');
-    if (!el4) return;
-    echarts.init(el4).setOption({
-        tooltip: { trigger: 'item' },
-        series: [{
-            type: 'pie', radius: ['40%', '70%'], label: { formatter: '{b}: {d}%' },
-            data: [
-                { value: 45.6, name: 'Nợ phải trả', itemStyle: { color: colors.danger } },
-                { value: 82.9, name: 'VCSH', itemStyle: { color: colors.success } }
+    const totalLineEl = document.getElementById('chart-1-2-total-linebar');
+    if (totalLineEl) {
+        const totalCurr = assetTotals; // tổng tài sản hiện tại
+        const totalPrev = [105, 110, 112, 118, 123]; // giả lập cùng kỳ năm trước
+        echarts.init(totalLineEl).setOption({
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['Tổng tài sản', 'Cùng kỳ năm trước'], bottom: 0 },
+            xAxis: { type: 'category', data: assetCats },
+            yAxis: { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
+            series: [
+                {
+                    name: 'Tổng tài sản',
+                    type: 'bar',
+                    data: totalCurr,
+                    itemStyle: { color: colors.primary },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{c} tỷ',
+                        fontSize: 11
+                    }
+                },
+                {
+                    name: 'Cùng kỳ năm trước',
+                    type: 'line',
+                    data: totalPrev,
+                    smooth: true,
+                    itemStyle: { color: colors.secondary }
+                }
             ]
-        }]
-    });
+        });
+    }
+
+    // Decomposition charts (dạng tree gần giống Power BI)
+    // Decomposition Tree với D3 (style giống Power BI)
+    function buildDecompTree(containerId, data, barColor) {
+        const container = document.getElementById(containerId);
+        if (!container || !window.d3) return;
+        container.innerHTML = '';
+
+        const width = container.clientWidth || 600;
+        const height = container.clientHeight || 260;
+
+        const svg = d3.select(container)
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height);
+
+        const margin = { top: 16, right: 12, bottom: 16, left: 12 };
+        const innerW = width - margin.left - margin.right;
+        const innerH = height - margin.top - margin.bottom;
+
+        let currentTransform = { x: margin.left, y: margin.top };
+        const g = svg.append('g')
+            .attr('transform', `translate(${currentTransform.x},${currentTransform.y})`);
+
+        const cardW = 210;
+        const cardH = 52;
+        const barW = 120;
+        const barH = 8;
+
+        const root = d3.hierarchy(data);
+        root.x0 = innerH / 2;
+        root.y0 = 0;
+
+        // collapse all children by default
+        root.children && root.children.forEach(collapseDeep);
+        function collapseDeep(d) {
+            if (d.children) {
+                d._children = d.children;
+                d._children.forEach(collapseDeep);
+                d.children = null;
+            }
+        }
+
+        const tree = d3.tree().nodeSize([68, 260]);
+
+        function maxSiblingValue(d) {
+            const parent = d.parent;
+            if (!parent) return d.data.value || 1;
+            const sib = (parent.children || parent._children || []);
+            return d3.max(sib, s => s.data.value || 0) || 1;
+        }
+
+        function diagonal(s, t) {
+            // bắt đầu tại giữa cạnh phải card cha, kết thúc tại giữa cạnh trái card con
+            const sx = s.x;
+            const sy = s.y + cardW;
+            const tx = t.x;
+            const ty = t.y;
+            const mx = (sy + ty) / 2;
+            return `M${sy},${sx} C${mx},${sx} ${mx},${tx} ${ty},${tx}`;
+        }
+
+        function formatNumber(v) {
+            return new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 2 }).format(v || 0);
+        }
+
+        function update(source) {
+            tree(root);
+            const nodes = root.descendants();
+            const links = root.links();
+
+            // căn giữa theo trục dọc
+            let minX = d3.min(nodes, d => d.x);
+            let maxX = d3.max(nodes, d => d.x);
+            const midX = (minX + maxX) / 2;
+            nodes.forEach(d => {
+                d.x = d.x - midX + innerH / 2;
+                d.y = d.depth * 230;
+            });
+
+            // links
+            const link = g.selectAll('path.link')
+                .data(links, d => d.target.data.name + '_' + d.target.depth);
+
+            link.enter()
+                .append('path')
+                .attr('class', 'link')
+                .attr('stroke', '#cbd5f5')
+                .attr('fill', 'none')
+                .attr('stroke-width', 1.8)
+                .attr('d', d => diagonal(source, source))
+                .merge(link)
+                .transition().duration(250)
+                .attr('d', d => diagonal(d.source, d.target));
+
+            link.exit()
+                .transition().duration(250)
+                .attr('d', d => diagonal(source, source))
+                .remove();
+
+            // nodes
+            const node = g.selectAll('g.node')
+                .data(nodes, d => d.data.name + '_' + d.depth);
+
+            const nodeEnter = node.enter()
+                .append('g')
+                .attr('class', 'node')
+                .attr('transform', `translate(${source.y0},${source.x0})`)
+                .style('cursor', 'pointer')
+                .on('click', (event, d) => {
+                    if (d.children) { d._children = d.children; d.children = null; }
+                    else { d.children = d._children; d._children = null; }
+                    update(d);
+                });
+
+            nodeEnter.append('rect')
+                .attr('x', 0)
+                .attr('y', -cardH / 2)
+                .attr('width', cardW)
+                .attr('height', cardH)
+                .attr('rx', 10)
+                .attr('ry', 10)
+                .attr('fill', '#ffffff')
+                .attr('stroke', '#e5e7eb')
+                .attr('stroke-width', 1.2)
+                .style('filter', 'drop-shadow(0 1px 2px rgba(15,23,42,0.10))');
+
+            nodeEnter.append('text')
+                .attr('x', 12)
+                .attr('y', -6)
+                .attr('font-size', 12)
+                .attr('font-weight', 600)
+                .attr('fill', '#111827')
+                .text(d => d.data.name);
+
+            nodeEnter.append('text')
+                .attr('x', 12)
+                .attr('y', 12)
+                .attr('font-size', 11)
+                .attr('fill', '#6b7280')
+                .text(d => d.data.value != null ? formatNumber(d.data.value) + ' tỷ' : '');
+
+            // bar bg
+            nodeEnter.append('rect')
+                .attr('x', cardW - barW - 12)
+                .attr('y', -barH / 2)
+                .attr('width', barW)
+                .attr('height', barH)
+                .attr('rx', 6)
+                .attr('ry', 6)
+                .attr('fill', '#f3f4f6');
+
+            // bar
+            nodeEnter.append('rect')
+                .attr('class', 'bar')
+                .attr('x', cardW - barW - 12)
+                .attr('y', -barH / 2)
+                .attr('height', barH)
+                .attr('rx', 6)
+                .attr('ry', 6)
+                .attr('fill', barColor)
+                .attr('width', d => {
+                    const m = maxSiblingValue(d);
+                    return Math.max(6, barW * ((d.data.value || 0) / m));
+                });
+
+            // expand indicator
+            nodeEnter.append('text')
+                .attr('x', cardW - 10)
+                .attr('y', -cardH / 2 + 16)
+                .attr('text-anchor', 'end')
+                .attr('font-size', 13)
+                .attr('fill', '#9ca3af')
+                .text(d => (d._children ? '+' : (d.children ? '–' : '')));
+
+            const nodeUpdate = nodeEnter.merge(node);
+
+            nodeUpdate.transition().duration(250)
+                .attr('transform', d => `translate(${d.y},${d.x})`);
+
+            nodeUpdate.select('rect.bar')
+                .transition().duration(250)
+                .attr('width', d => {
+                    const m = maxSiblingValue(d);
+                    return Math.max(6, barW * ((d.data.value || 0) / m));
+                });
+
+            nodeUpdate.select('text')
+                .filter((d, i, nodesArr) => nodesArr[i].textContent === '+' || nodesArr[i].textContent === '–')
+                .text(d => (d._children ? '+' : (d.children ? '–' : '')));
+
+            node.exit()
+                .transition().duration(250)
+                .attr('transform', `translate(${source.y},${source.x})`)
+                .remove();
+
+            nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+        }
+
+        update(root);
+
+        // Cho phép kéo toàn bộ cụm tree trong khung
+        const dragBehavior = d3.drag()
+            .on('drag', (event) => {
+                currentTransform.x += event.dx;
+                currentTransform.y += event.dy;
+                g.attr('transform', `translate(${currentTransform.x},${currentTransform.y})`);
+            });
+
+        svg.call(dragBehavior);
+    }
+
+    const decompAssetEl = document.getElementById('chart-1-2-decomp-asset');
+    if (decompAssetEl) {
+        const assetTree = {
+            name: 'Tổng tài sản',
+            value: 128.5,
+            children: [
+                {
+                    name: 'Tài sản ngắn hạn',
+                    value: 55.0,
+                    children: [
+                        { name: 'Tiền & TĐT', value: 12.8 },
+                        { name: 'Các khoản phải thu', value: 18.2 },
+                        { name: 'Hàng tồn kho', value: 11.3 },
+                        { name: 'TSNH khác', value: 12.7 }
+                    ]
+                },
+                {
+                    name: 'Tài sản dài hạn',
+                    value: 73.5,
+                    children: [
+                        { name: 'Phải thu dài hạn', value: 8.0 },
+                        { name: 'Tài sản cố định', value: 40.0 },
+                        { name: 'TS dở dang DH', value: 10.0 },
+                        { name: 'ĐTTC dài hạn', value: 8.0 },
+                        { name: 'Tài sản DH khác', value: 7.5 }
+                    ]
+                }
+            ]
+        };
+        buildDecompTree('chart-1-2-decomp-asset', assetTree, colors.primary);
+    }
+
+    const decompLiabEl = document.getElementById('chart-1-2-decomp-liab');
+    if (decompLiabEl) {
+        const liabTree = {
+            name: 'Nợ phải trả',
+            value: 45.6,
+            children: [
+                {
+                    name: 'Nợ ngắn hạn',
+                    value: 31.6,
+                    children: [
+                        { name: 'Vay & nợ NH', value: 15.3 },
+                        { name: 'Phải trả người bán', value: 8.0 },
+                        { name: 'Thuế & phí', value: 4.0 },
+                        { name: 'Nợ NH khác', value: 4.3 }
+                    ]
+                },
+                {
+                    name: 'Nợ dài hạn',
+                    value: 14.0,
+                    children: [
+                        { name: 'Vay & nợ DH', value: 8.0 },
+                        { name: 'Trái phiếu DH', value: 3.0 },
+                        { name: 'Dự phòng DH', value: 2.0 },
+                        { name: 'Nợ DH khác', value: 1.0 }
+                    ]
+                }
+            ]
+        };
+        buildDecompTree('chart-1-2-decomp-liab', liabTree, colors.danger);
+    }
+
+    const decompEquityEl = document.getElementById('chart-1-2-decomp-equity');
+    if (decompEquityEl) {
+        const equityTree = {
+            name: 'Vốn chủ sở hữu',
+            value: 82.9,
+            children: [
+                {
+                    name: 'Vốn góp',
+                    value: 60.0,
+                    children: [
+                        { name: 'Vốn điều lệ', value: 45.0 },
+                        { name: 'Thặng dư vốn', value: 15.0 }
+                    ]
+                },
+                {
+                    name: 'Lợi nhuận giữ lại',
+                    value: 18.0,
+                    children: [
+                        { name: 'LN chưa phân phối', value: 12.0 },
+                        { name: 'Quỹ ĐT phát triển', value: 6.0 }
+                    ]
+                },
+                {
+                    name: 'Yếu tố khác',
+                    value: 4.9,
+                    children: [
+                        { name: 'Chênh lệch đánh giá lại', value: 2.5 },
+                        { name: 'Chênh lệch tỷ giá', value: 2.4 }
+                    ]
+                }
+            ]
+        };
+        buildDecompTree('chart-1-2-decomp-equity', equityTree, colors.success);
+    }
     // Drill-down 1.2
     const dd1 = document.getElementById('chart-1-2-drill-stack1');
     if (dd1) echarts.init(dd1).setOption({
@@ -232,9 +642,10 @@ function initPage12() {
         tooltip: { trigger: 'axis' }, legend: { bottom: 0 },
         xAxis: { type: 'category', data: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'] }, yAxis: { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
         series: [
-            { name: 'Tiền', type: 'bar', stack: 'ts', data: [12, 12.5, 13, 13.2, 13.1, 12.8], itemStyle: { color: colors.success } },
+            { name: 'Tiền & tương đương tiền', type: 'bar', stack: 'ts', data: [12, 12.5, 13, 13.2, 13.1, 12.8], itemStyle: { color: colors.success } },
             { name: 'Phải thu', type: 'bar', stack: 'ts', data: [15, 15.4, 15.8, 16.2, 16.6, 17.0], itemStyle: { color: colors.warning } },
-            { name: 'Hàng tồn kho', type: 'bar', stack: 'ts', data: [10, 10.2, 10.5, 10.8, 11, 11.3], itemStyle: { color: colors.info } }
+            { name: 'Hàng tồn kho', type: 'bar', stack: 'ts', data: [10, 10.2, 10.5, 10.8, 11, 11.3], itemStyle: { color: colors.info } },
+            { name: 'Tài sản ngắn hạn khác', type: 'bar', stack: 'ts', data: [8.0, 8.2, 8.4, 8.6, 8.8, 9.0], itemStyle: { color: colors.gray } }
         ]
     });
 
@@ -258,25 +669,52 @@ function initPage12() {
 function initPage13() {
     const gaugeOpt = (val, name, max, reverse) => ({
         series: [{
-            type: 'gauge', radius: '100%',
+            type: 'gauge',
+            radius: '100%',
             center: ['50%', '70%'],
-            startAngle: 180, endAngle: 0,
-            min: 0, max: max,
-            axisLine: { lineStyle: { width: 30, color: reverse ? [[0.4, '#10b981'], [0.7, '#f59e0b'], [1, '#ef4444']] : [[0.4, '#ef4444'], [0.7, '#f59e0b'], [1, '#10b981']] } },
-            pointer: { length: '50%', width: 5 },
-            axisLabel: { distance: -40, fontSize: 10 },
-            detail: { show: true, fontSize: 20, fontWeight: 'bold', offsetCenter: [0, '30%'], formatter: '{value}' },
+            startAngle: 180,
+            endAngle: 0,
+            min: 0,
+            max: max,
+            splitNumber: 5,
+            axisLine: {
+                lineStyle: {
+                    width: 24,
+                    color: reverse
+                        ? [[0.4, colors.success], [0.7, colors.warning], [1, colors.danger]]
+                        : [[0.4, colors.danger], [0.7, colors.warning], [1, colors.success]]
+                }
+            },
+            axisTick: { show: false },
+            splitLine: { length: 10, lineStyle: { color: '#9ca3af', width: 1.5 } },
+            axisLabel: {
+                distance: -40,
+                fontSize: 10,
+                color: '#6b7280',
+                formatter: (v) => {
+                    if (max <= 3) return v.toFixed(1);
+                    return v.toFixed(0);
+                }
+            },
+            pointer: { length: '52%', width: 4 },
+            detail: {
+                show: true,
+                fontSize: 18,
+                fontWeight: 'bold',
+                offsetCenter: [0, '30%'],
+                formatter: '{value}'
+            },
             data: [{ value: val, name: name }],
             title: { show: false }
         }]
     });
 
     const gaugeConfigs = [
-        { id: 'chart-1-3-g1', val: 1.8, name: 'Current', max: 3, rev: false },
-        { id: 'chart-1-3-g2', val: 1.2, name: 'Quick', max: 2, rev: false },
-        { id: 'chart-1-3-g4', val: 0.45, name: 'Cash', max: 1, rev: false },
-        { id: 'chart-1-3-g3', val: 0.55, name: 'D/E', max: 2, rev: true },
-        { id: 'chart-1-3-g5', val: 4.5, name: 'Interest Cov.', max: 10, rev: false }
+        { id: 'chart-1-3-g1', val: 1.8, name: 'Hiện hành', max: 3, rev: false },
+        { id: 'chart-1-3-g2', val: 1.2, name: 'Nhanh', max: 2, rev: false },
+        { id: 'chart-1-3-g4', val: 0.45, name: 'Tiền mặt', max: 1, rev: false },
+        { id: 'chart-1-3-g3', val: 0.55, name: 'Nợ/VCSH', max: 2, rev: true },
+        { id: 'chart-1-3-g5', val: 4.5, name: 'Khả năng trả lãi', max: 10, rev: false }
     ];
 
     gaugeConfigs.forEach(cfg => {
@@ -284,80 +722,167 @@ function initPage13() {
         if (el) echarts.init(el).setOption(gaugeOpt(cfg.val, cfg.name, cfg.max, cfg.rev));
     });
 
-    const lineEl = document.getElementById('chart-1-3-line');
-    if (lineEl) {
-        echarts.init(lineEl).setOption({
-            tooltip: { trigger: 'axis' },
-            legend: { data: ['Current', 'Quick', 'D/E'], bottom: 0, textStyle: { fontSize: 10 } },
-            xAxis: { type: 'category', data: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'] },
-            yAxis: { type: 'value' },
+    const comboData = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'];
+
+    // Chart 1: TSNH vs Nợ NH + Current Ratio
+    const combo1 = document.getElementById('chart-1-3-drill-combo1');
+    if (combo1) echarts.init(combo1).setOption({
+        tooltip: { trigger: 'axis' },
+        legend: { data: ['TSNH', 'Nợ NH', 'Hệ số hiện hành'], bottom: 0 },
+        xAxis: { type: 'category', data: comboData },
+        yAxis: [
+            { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
+            { type: 'value', min: 0, max: 3, axisLabel: { formatter: '{value}x' } }
+        ],
+        series: [
+            { name: 'TSNH', type: 'bar', data: [40, 42, 43, 45, 46, 48], itemStyle: { color: colors.info } },
+            { name: 'Nợ NH', type: 'bar', data: [20, 21, 22, 23, 24, 25], itemStyle: { color: colors.danger } },
+            { name: 'Hệ số hiện hành', type: 'line', yAxisIndex: 1, data: [1.9, 2.0, 2.0, 2.0, 1.9, 1.9], smooth: true, itemStyle: { color: colors.success } }
+        ]
+    });
+
+    // Chart 2: (TSNH - HTK) vs Nợ NH + Quick Ratio
+    const combo2 = document.getElementById('chart-1-3-drill-combo2');
+    if (combo2) echarts.init(combo2).setOption({
+        tooltip: { trigger: 'axis' },
+        legend: { data: ['TSNH - HTK', 'Nợ NH', 'Hệ số nhanh'], bottom: 0 },
+        xAxis: { type: 'category', data: comboData },
+        yAxis: [
+            { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
+            { type: 'value', min: 0, max: 2, axisLabel: { formatter: '{value}x' } }
+        ],
+        series: [
+            { name: 'TSNH - HTK', type: 'bar', data: [30, 31, 31, 32, 33, 33], itemStyle: { color: colors.primary } },
+            { name: 'Nợ NH', type: 'bar', data: [20, 21, 22, 23, 24, 25], itemStyle: { color: colors.danger } },
+            { name: 'Hệ số nhanh', type: 'line', yAxisIndex: 1, data: [1.5, 1.48, 1.41, 1.39, 1.38, 1.32], smooth: true, itemStyle: { color: colors.accent } }
+        ]
+    });
+
+    // Chart 3: Tiền vs Nợ NH + Cash Ratio
+    const combo3 = document.getElementById('chart-1-3-drill-combo3');
+    if (combo3) echarts.init(combo3).setOption({
+        tooltip: { trigger: 'axis' },
+        legend: { data: ['Tiền', 'Nợ NH', 'Hệ số tiền mặt'], bottom: 0 },
+        xAxis: { type: 'category', data: comboData },
+        yAxis: [
+            { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
+            { type: 'value', min: 0, max: 1.2, axisLabel: { formatter: '{value}x' } }
+        ],
+        series: [
+            { name: 'Tiền', type: 'bar', data: [15, 14, 13, 14, 13, 12.8], itemStyle: { color: colors.success } },
+            { name: 'Nợ NH', type: 'bar', data: [20, 21, 22, 23, 24, 25], itemStyle: { color: colors.danger } },
+            { name: 'Hệ số tiền mặt', type: 'line', yAxisIndex: 1, data: [0.75, 0.67, 0.59, 0.61, 0.54, 0.51], smooth: true, itemStyle: { color: colors.purple } }
+        ]
+    });
+
+    // Chart 4: Nợ vs VCSH + D/E Ratio (bar nằm bên trong)
+    const deEl = document.getElementById('chart-1-3-drill-de');
+    if (deEl) {
+        const debtData = [38, 40, 42, 44, 45, 45.6];
+        const equityData = [72, 76, 78, 80, 82, 82.9];
+        const ratioData = [0.53, 0.53, 0.54, 0.55, 0.55, 0.55];
+        echarts.init(deEl).setOption({
+            tooltip: {
+                trigger: 'axis',
+                formatter: (params) => {
+                    const debt = params.find(p => p.seriesName === 'Nợ phải trả');
+                    const equity = params.find(p => p.seriesName === 'Vốn CSH');
+                    const ratio = ratioData[debt.dataIndex];
+                    return `${debt.name}<br/>Nợ phải trả: ${debt.value} tỷ<br/>Vốn CSH: ${equity.value} tỷ<br/>Nợ/VCSH: ${ratio.toFixed(2)}x`;
+                }
+            },
+            legend: { data: ['Nợ phải trả', 'Vốn CSH'], bottom: 0 },
+            xAxis: { type: 'category', data: comboData },
+            yAxis: { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
             series: [
-                { name: 'Current', type: 'line', data: [1.5, 1.6, 1.6, 1.7, 1.7, 1.75, 1.8, 1.78, 1.82, 1.79, 1.8, 1.8], smooth: true },
-                { name: 'Quick', type: 'line', data: [1.0, 1.05, 1.1, 1.1, 1.15, 1.18, 1.2, 1.18, 1.22, 1.2, 1.2, 1.2], smooth: true },
-                { name: 'D/E', type: 'line', data: [0.58, 0.57, 0.56, 0.56, 0.55, 0.55, 0.54, 0.55, 0.55, 0.55, 0.55, 0.55], smooth: true }
+                {
+                    name: 'Nợ phải trả',
+                    type: 'bar',
+                    data: debtData,
+                    barWidth: '60%',
+                    itemStyle: {
+                        color: colors.danger,
+                        borderWidth: 0
+                    }
+                },
+                {
+                    name: 'Vốn CSH',
+                    type: 'bar',
+                    data: equityData,
+                    barWidth: '60%',
+                    barGap: '-100%',
+                    z: 3,
+                    itemStyle: {
+                        color: 'transparent',
+                        borderColor: colors.success,
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: (params) => {
+                            const idx = params.dataIndex;
+                            return `${ratioData[idx].toFixed(2)}`;
+                        },
+                        fontSize: 11,
+                        fontWeight: 'bold',
+                        color: colors.primary
+                    }
+                }
             ]
         });
     }
 
-    const comboData = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'];
-
-    const combo1 = document.getElementById('chart-1-3-drill-combo1');
-    if (combo1) echarts.init(combo1).setOption({
-        tooltip: { trigger: 'axis' }, legend: { bottom: 0 },
-        xAxis: { type: 'category', data: comboData },
-        yAxis: [{ type: 'value', axisLabel: { formatter: '{value} tỷ' } }, { type: 'value', min: 0, max: 3, axisLabel: { formatter: '{value}x' } }],
-        series: [
-            { name: 'TSNH', type: 'bar', data: [40, 42, 43, 45, 46, 48], itemStyle: { color: colors.info } },
-            { name: 'Nợ NH', type: 'bar', data: [20, 21, 22, 23, 24, 25], itemStyle: { color: colors.danger } },
-            { name: 'Current Ratio', type: 'line', yAxisIndex: 1, data: [1.9, 2.0, 2.0, 2.0, 1.9, 1.9], smooth: true, itemStyle: { color: colors.success } }
-        ]
-    });
-
-    const combo2 = document.getElementById('chart-1-3-drill-combo2');
-    if (combo2) echarts.init(combo2).setOption({
-        tooltip: { trigger: 'axis' }, legend: { bottom: 0 },
-        xAxis: { type: 'category', data: comboData },
-        yAxis: [{ type: 'value', axisLabel: { formatter: '{value} tỷ' } }, { type: 'value', min: 0, max: 2, axisLabel: { formatter: '{value}x' } }],
-        series: [
-            { name: 'TSNH - HTK', type: 'bar', data: [30, 31, 31, 32, 33, 33], itemStyle: { color: colors.primary } },
-            { name: 'Nợ NH', type: 'bar', data: [20, 21, 22, 23, 24, 25], itemStyle: { color: colors.danger } },
-            { name: 'Quick Ratio', type: 'line', yAxisIndex: 1, data: [1.5, 1.48, 1.41, 1.39, 1.38, 1.32], smooth: true, itemStyle: { color: colors.accent } }
-        ]
-    });
-
-    const combo3 = document.getElementById('chart-1-3-drill-combo3');
-    if (combo3) echarts.init(combo3).setOption({
-        tooltip: { trigger: 'axis' }, legend: { bottom: 0 },
-        xAxis: { type: 'category', data: comboData },
-        yAxis: [{ type: 'value', axisLabel: { formatter: '{value} tỷ' } }, { type: 'value', min: 0, max: 1.2, axisLabel: { formatter: '{value}x' } }],
-        series: [
-            { name: 'Tiền', type: 'bar', data: [15, 14, 13, 14, 13, 12.8], itemStyle: { color: colors.success } },
-            { name: 'Nợ NH', type: 'bar', data: [20, 21, 22, 23, 24, 25], itemStyle: { color: colors.danger } },
-            { name: 'Cash Ratio', type: 'line', yAxisIndex: 1, data: [0.75, 0.67, 0.59, 0.61, 0.54, 0.51], smooth: true, itemStyle: { color: colors.purple } }
-        ]
-    });
-
-    const stackEl = document.getElementById('chart-1-3-drill-stack');
-    if (stackEl) echarts.init(stackEl).setOption({
-        tooltip: { trigger: 'axis' }, legend: { bottom: 0 },
-        xAxis: { type: 'category', data: comboData }, yAxis: { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
-        series: [
-            { name: 'Tiền', type: 'bar', stack: 'total', data: [15, 14, 13, 13, 13, 12.8], itemStyle: { color: colors.success } },
-            { name: 'Phải thu', type: 'bar', stack: 'total', data: [15, 16, 17, 18, 18, 18.2], itemStyle: { color: colors.warning } },
-            { name: 'HTK', type: 'bar', stack: 'total', data: [10, 10, 11, 11, 12, 12], itemStyle: { color: colors.info } }
-        ]
-    });
-
-    const industryEl = document.getElementById('chart-1-3-drill-industry');
-    if (industryEl) echarts.init(industryEl).setOption({
-        tooltip: { trigger: 'axis' }, legend: { bottom: 0 },
-        xAxis: { type: 'category', data: ['Current', 'Quick', 'Cash'] },
-        yAxis: { type: 'value', min: 0, max: 3, axisLabel: { formatter: '{value}x' } },
-        series: [
-            { name: 'Doanh nghiệp', type: 'bar', data: [1.8, 1.2, 0.45], itemStyle: { color: colors.primary } },
-            { name: 'Ngành', type: 'bar', data: [1.5, 1.05, 0.35], itemStyle: { color: colors.secondary } }
-        ]
-    });
+    // Chart 5: LN trước lãi vs Chi phí lãi + Interest Coverage (chi phí lãi căn giữa)
+    const interestEl = document.getElementById('chart-1-3-drill-interest');
+    if (interestEl) {
+        const ebitData = [1.2, 1.3, 1.4, 1.5, 1.6, 1.7];
+        const interestData = [0.25, 0.26, 0.27, 0.28, 0.29, 0.3];
+        const coverageData = [4.8, 4.9, 5.0, 5.1, 5.2, 5.3];
+        echarts.init(interestEl).setOption({
+            tooltip: {
+                trigger: 'axis',
+                formatter: (params) => {
+                    const ebit = params.find(p => p.seriesName === 'LN trước lãi vay');
+                    const interest = params.find(p => p.seriesName === 'Chi phí lãi vay');
+                    const coverage = coverageData[ebit.dataIndex];
+                    return `${ebit.name}<br/>LN trước lãi vay: ${ebit.value} tỷ<br/>Chi phí lãi vay: ${interest.value} tỷ<br/>Khả năng trả lãi: ${coverage.toFixed(1)}x`;
+                }
+            },
+            legend: { data: ['LN trước lãi vay', 'Chi phí lãi vay'], bottom: 0 },
+            xAxis: { type: 'category', data: comboData },
+            yAxis: { type: 'value', axisLabel: { formatter: '{value} tỷ' } },
+            series: [
+                {
+                    name: 'LN trước lãi vay',
+                    type: 'bar',
+                    data: ebitData,
+                    itemStyle: { color: colors.success },
+                    barWidth: '60%',
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: (params) => {
+                            const idx = params.dataIndex;
+                            return `${coverageData[idx].toFixed(1)}`;
+                        },
+                        fontSize: 10,
+                        fontWeight: 'bold',
+                        color: colors.secondary
+                    }
+                },
+                {
+                    name: 'Chi phí lãi vay',
+                    type: 'bar',
+                    data: interestData,
+                    itemStyle: { color: colors.pink },
+                    barWidth: '35%',
+                    barGap: '-100%',
+                    z: 2
+                }
+            ]
+        });
+    }
 }
 // Page 2.1 - Tổng quan KQKD
 function initPage21() {
