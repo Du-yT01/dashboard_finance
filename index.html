@@ -123,6 +123,26 @@
             box-shadow: var(--shadow);
         }
 
+        /* Inline Guidance Styles */
+        .page-instruction {
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 3px solid var(--primary-light);
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #475569;
+            font-style: italic;
+            border-radius: 4px;
+        }
+
+        .chart-subtitle {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 400;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
         .page-header h1 {
             font-size: 22px;
             color: var(--primary);
@@ -1087,14 +1107,20 @@
                 <div class="chart-row auto">
                     <div class="chart-box">
                         <h3>Xu hướng tài sản & nợ (6 tháng)</h3>
+                        <p class="chart-subtitle">Theo dõi khoảng chênh lệch giữa TS và Nợ. Khoảng trống này càng rộng
+                            cho thấy tiềm lực tài chính tự chủ càng tăng.</p>
                         <div id="chart-1-1-trend" class="chart"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Hệ số thanh toán hiện hành</h3>
+                        <p class="chart-subtitle">Chỉ số được tính từ tỷ lệ của tổng tài sản ngắn hạn và nợ ngắn
+                            hạn, Mục tiêu chỉ số là > 1.1 và cần làm gì để đạt được thì sẽ xem trong trang 1.2.</p>
                         <div id="chart-1-1-gauge-current" class="chart small"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Tỷ lệ Nợ/Vốn chủ</h3>
+                        <p class="chart-subtitle">Đo lường mức độ rủi ro tài chính. Tỷ lệ này giảm đồng nghĩa với việc
+                            doanh nghiệp đang giảm nợ vay.</p>
                         <div id="chart-1-1-gauge-de" class="chart small"></div>
                     </div>
                 </div>
@@ -1105,14 +1131,20 @@
                     <div class="chart-row auto">
                         <div class="chart-box">
                             <h3>Cơ cấu Tiền (TM vs TG)</h3>
+                            <p class="chart-subtitle">Xem xét tỷ lệ tiền gửi ngân hàng để tối ưu hóa doanh thu hoạt động
+                                tài chính (lãi tiền gửi).</p>
                             <div id="chart-1-1-drill-donut" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>Top 5 Khoản làm TS tăng/giảm</h3>
+                            <p class="chart-subtitle">Xác định các "driver" chính làm thay đổi quy mô tài sản trong quý
+                                (như đầu tư mới hoặc thanh lý).</p>
                             <div id="chart-1-1-drill-bar1" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>Top 5 Khoản làm Nợ tăng/giảm</h3>
+                            <p class="chart-subtitle">Chi tiết các nguồn làm tăng nghĩa vụ nợ, giúp quản lý dòng tiền
+                                trả nợ chủ động hơn.</p>
                             <div id="chart-1-1-drill-bar2" class="chart small"></div>
                         </div>
                     </div>
@@ -1124,25 +1156,34 @@
                 <div class="page-header">
                     <h1>BC1.2 Khả năng thanh toán</h1>
                 </div>
+                <div class="page-instruction">
+                    Phân tích khả năng đáp ứng các nghĩa vụ tài chính ngắn hạn. Các biểu đồ dưới đây đi từ tổng quát
+                    (Tài sản ngắn hạn) đến chi tiết (Tiền mặt) để xác định điểm nghẽn thanh khoản.
+                </div>
                 <div class="chart-row auto">
                     <div class="chart-box">
                         <h3>Hệ số thanh toán bằng tiền</h3>
+                        <p class="chart-subtitle">Tỷ lệ tiền mặt sẵn có để trả nợ ngay lập tức.</p>
                         <div id="chart-1-3-g4" class="chart tiny"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Hệ số thanh toán nhanh</h3>
+                        <p class="chart-subtitle">Khả năng trả nợ không phụ thuộc vào hàng tồn kho.</p>
                         <div id="chart-1-3-g2" class="chart tiny"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Hệ số thanh toán hiện hành</h3>
+                        <p class="chart-subtitle">Tổng tài sản ngắn hạn so với nợ ngắn hạn.</p>
                         <div id="chart-1-3-g1" class="chart tiny"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Tỷ lệ Nợ/Vốn chủ sở hữu</h3>
+                        <p class="chart-subtitle">Mức độ sử dụng đòn bẩy tài chính (Debt-to-Equity).</p>
                         <div id="chart-1-3-g3" class="chart tiny"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Khả năng thanh toán lãi vay</h3>
+                        <p class="chart-subtitle">Mức độ an toàn của lợi nhuận so với lãi vay phải trả.</p>
                         <div id="chart-1-3-g5" class="chart tiny"></div>
                     </div>
                 </div>
@@ -1153,24 +1194,34 @@
                     <div class="chart-row auto">
                         <div class="chart-box">
                             <h3>TSNH vs Nợ NH + Hệ số hiện hành</h3>
+                            <p class="chart-subtitle">So sánh quy mô Tài sản ngắn hạn và Nợ ngắn hạn. Xem chi tiết các
+                                khoản Phải thu tại báo cáo 3.2 nếu hệ số này biến động mạnh.</p>
                             <div id="chart-1-3-drill-combo1" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>(TSNH - HTK) vs Nợ NH + Hệ số nhanh</h3>
+                            <p class="chart-subtitle">Loại bỏ Hàng tồn kho để đánh giá khả năng thanh toán bằng các tài
+                                sản có tính thanh khoản cao hơn.</p>
                             <div id="chart-1-3-drill-combo2" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>Tiền vs Nợ NH + Hệ số tiền mặt</h3>
+                            <p class="chart-subtitle">Đánh giá mức độ an toàn tuyệt đối. Tiền mặt là lớp phòng thủ cuối
+                                cùng trước các nghĩa vụ nợ đến hạn.</p>
                             <div id="chart-1-3-drill-combo3" class="chart small"></div>
                         </div>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
                             <h3>Nợ vs VCSH + Tỷ lệ Nợ/Vốn CSH</h3>
+                            <p class="chart-subtitle">Xem xét sự cân bằng giữa vốn vay và vốn tự có. Xem thêm BC1.1 để
+                                thấy xu hướng dài hạn.</p>
                             <div id="chart-1-3-drill-de" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>LN trước lãi vs Chi phí lãi + Khả năng trả lãi</h3>
+                            <p class="chart-subtitle">Phân tích biên an toàn lợi nhuận. Nếu chỉ số này thấp, rủi ro mất
+                                khả năng chi trả là rất lớn.</p>
                             <div id="chart-1-3-drill-interest" class="chart small"></div>
                         </div>
                     </div>
@@ -1180,6 +1231,10 @@
             <div id="page-1-3" class="page">
                 <div class="page-header">
                     <h1>BC1.3 Bảng Cân đối Kế toán</h1>
+                </div>
+                <div class="page-instruction">
+                    Phân tích cấu trúc Tài sản và Nguồn vốn. Xem xét sự tương quan giữa các khoản mục để đánh giá mức độ
+                    ổn định và hiệu quả sử dụng nguồn vốn của doanh nghiệp.
                 </div>
                 <!-- Phần 1: KPI + Line/Bar -->
                 <div class="layout-1-2-top">
@@ -1209,6 +1264,8 @@
                     </div>
                     <div class="chart-box">
                         <h3>Tổng tài sản & so với cùng kỳ</h3>
+                        <p class="chart-subtitle">So sánh quy mô tài sản hiện tại với các mốc lịch sử để thấy tốc độ
+                            tăng trưởng quy mô doanh nghiệp.</p>
                         <div id="chart-1-2-total-linebar" class="chart"></div>
                     </div>
                 </div>
@@ -1221,14 +1278,20 @@
                     <div class="chart-row auto">
                         <div class="chart-box">
                             <h3>Phân rã Tổng tài sản</h3>
+                            <p class="chart-subtitle">Tỷ trọng các nhóm tài sản. Nhấp vào các phần để xem chi tiết biến
+                                động từng khoản mục.</p>
                             <div id="chart-1-2-decomp-asset" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>Phân rã Nợ phải trả</h3>
+                            <p class="chart-subtitle">Cơ cấu nợ ngắn và dài hạn. Xem BC3.3 để phân tích chi tiết các nhà
+                                cung cấp.</p>
                             <div id="chart-1-2-decomp-liab" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>Phân rã Vốn chủ sở hữu</h3>
+                            <p class="chart-subtitle">Nguồn gốc vốn chủ (Lợi nhuận giữ lại vs Vốn góp). Phản ánh khả
+                                năng tích lũy nội tại.</p>
                             <div id="chart-1-2-decomp-equity" class="chart small"></div>
                         </div>
                     </div>
@@ -1236,6 +1299,8 @@
 
                 <div class="chart-box balance-summary">
                     <h3>Bảng cân đối tóm tắt</h3>
+                    <p class="chart-subtitle">Tổng hợp các chỉ tiêu cốt lõi. Hãy đối chiếu các con số này với các biểu
+                        đồ phân rã phía trên để thấy bức tranh chi tiết.</p>
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -1322,6 +1387,10 @@
                 <div class="page-header">
                     <h1>BC2.1 Tổng quan Kết quả kinh doanh</h1>
                 </div>
+                <div class="page-instruction">
+                    Theo dõi hiệu quả kinh doanh qua doanh thu, lợi nhuận và biên lợi nhuận. Sử dụng biểu đồ cầu thác để
+                    xác định các yếu tố ăn mòn lợi nhuận.
+                </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
                         <div class="label">Doanh thu thuần</div>
@@ -1347,20 +1416,29 @@
                 <div class="chart-row">
                     <div class="chart-box" style="grid-column: span 1;">
                         <h3>Cầu thác: Doanh thu → Lợi nhuận</h3>
+                        <p class="chart-subtitle">Xác định các khoản chi phí lớn nhất làm giảm lợi nhuận thuần từ doanh
+                            thu ban đầu.</p>
                         <div id="chart-2-1-waterfall" class="chart" style="height: 320px;"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Cơ cấu Lợi nhuận theo Dịch vụ</h3>
+                        <p class="chart-subtitle">Giúp nhận diện mảng kinh doanh cốt lõi mang lại giá trị cao nhất cho
+                            doanh nghiệp.</p>
                         <div id="chart-2-1-profit-pie" class="chart" style="height: 320px;"></div>
                     </div>
                 </div>
                 <div class="chart-row">
                     <div class="chart-box">
                         <h3>Lợi nhuận theo thời gian so với năm trước</h3>
+                        <p class="chart-subtitle">So sánh hiệu quả hàng tháng với năm trước để thấy được tính chu kỳ và
+                            tăng trưởng.</p>
                         <div id="chart-2-1-profit-combo" class="chart"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Doanh thu và Chi phí theo thời gian</h3>
+                        <p class="chart-subtitle">Kiểm soát tương quan giữa tốc độ tăng doanh thu và tốc độ tăng chi phí
+                            vận hành. Để đánh giá nguyên nhân của việc lợi nhuận gặp vấn đề đến từ doanh thu thì sẽ tìm
+                            hiểu ở trang 2.2. còn nếu do chi phí thì sẽ tìm hiểu ở trang 2.3</p>
                         <div id="chart-2-1-revenue-cost-bar" class="chart"></div>
                     </div>
                 </div>
@@ -1370,6 +1448,10 @@
             <div id="page-2-2" class="page">
                 <div class="page-header">
                     <h1>BC2.2 Phân tích Doanh thu</h1>
+                </div>
+                <div class="page-instruction">
+                    Đánh giá hiệu suất bán hàng qua cơ cấu khách hàng và dịch vụ. Xác định nhóm khách hàng mang lại 80%
+                    giá trị doanh nghiệp.
                 </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
@@ -1396,10 +1478,14 @@
                 <div class="chart-row">
                     <div class="chart-box">
                         <h3>Cơ cấu Doanh thu theo loại</h3>
+                        <p class="chart-subtitle">Phân tích sự cân bằng và đa dạng hóa các lĩnh vực kinh doanh chính.
+                        </p>
                         <div id="chart-2-2-type-pie" class="chart"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Doanh thu và Sản lượng theo thời gian</h3>
+                        <p class="chart-subtitle">Theo dõi biến động quy mô bán hàng và giá bán bình quân (Unit Price).
+                        </p>
                         <div id="chart-2-2-linebar" class="chart"></div>
                     </div>
                 </div>
@@ -1411,6 +1497,8 @@
                     <div class="chart-row auto">
                         <div class="chart-box">
                             <h3>Top 10 Khách hàng</h3>
+                            <p class="chart-subtitle">Sử dụng nút toggle để chuyển đổi giữa xem theo Doanh thu và Sản
+                                lượng.</p>
                             <div style="margin-bottom: 5px;">
                                 <button id="btn-2-2-revenue"
                                     style="padding: 8px 16px; margin-right: 8px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">Theo
@@ -1423,10 +1511,14 @@
                         </div>
                         <div class="chart-box">
                             <h3>Heatmap: Khách hàng x Dịch vụ</h3>
+                            <p class="chart-subtitle">Nhận diện rủi ro phụ thuộc quá mức hoặc cơ sở khách hàng lý tưởng.
+                            </p>
                             <div id="chart-2-2-heatmap" class="chart"></div>
                         </div>
                         <div class="chart-box">
                             <h3>Pareto đóng góp % Doanh thu</h3>
+                            <p class="chart-subtitle">Xác định 20% khách hàng đóng góp 80% doanh thu (Nguyên lý Pareto).
+                            </p>
                             <div id="chart-2-2-pareto" class="chart"></div>
                         </div>
                     </div>
@@ -1437,6 +1529,10 @@
             <div id="page-2-3" class="page">
                 <div class="page-header">
                     <h1>BC2.3 Phân tích Chi phí</h1>
+                </div>
+                <div class="page-instruction">
+                    Tối ưu hóa bảng chi phí bằng cách phân tích cơ cấu cố định/biến đổi và quản trị hiệu quả sử dụng
+                    nguồn lực doanh nghiệp.
                 </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
@@ -1464,10 +1560,14 @@
                 <div class="chart-row">
                     <div class="chart-box">
                         <h3>Cơ cấu Chi phí theo loại</h3>
+                        <p class="chart-subtitle">Phân loại các khoản chi phí lớn nhất để xác định trọng tâm cắt giảm
+                            hoặc tối ưu.</p>
                         <div id="chart-2-3-type-pie" class="chart"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Top 10 Khoản chi lớn nhất</h3>
+                        <p class="chart-subtitle">Sử dụng bộ lọc để xem chi tiết các lái trưởng chi phí (Cost Drivers)
+                            theo tính chất cố định/biến đổi.</p>
                         <div style="margin-bottom: 6px;">
                             <button id="btn-2-3-all"
                                 style="padding: 8px 16px; margin-right: 8px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">Toàn
@@ -1490,20 +1590,28 @@
                     <div class="chart-row auto">
                         <div class="chart-box">
                             <h3>Xu hướng chi phí cố định và chi phí biến đổi</h3>
+                            <p class="chart-subtitle">Kiểm soát điểm hòa vốn qua việc theo dõi sự ổn định của chi phí cố
+                                định khi sản lượng thay đổi.</p>
                             <div id="chart-2-3-trend-line" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>Chi phí so với Doanh thu (tỷ lệ phần trăm)</h3>
+                            <p class="chart-subtitle">Đảm bảo tốc độ tăng chi phí vận hành luôn thấp hơn tốc độ tăng
+                                trưởng doanh thu.</p>
                             <div id="chart-2-3-ratio-combo" class="chart small"></div>
                         </div>
                     </div>
                     <div class="chart-row auto">
                         <div class="chart-box">
                             <h3>Chi phí theo nhà cung cấp</h3>
+                            <p class="chart-subtitle">Nhận diện các đối tác chiến lược để đàm phán chính sách giá và
+                                công nợ tốt hơn.</p>
                             <div id="chart-2-3-vendor-bar" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>Sản lượng so với Chi phí</h3>
+                            <p class="chart-subtitle">Đánh giá tính kinh tế theo quy mô để xác định mức sản lượng tối ưu
+                                chi phí.</p>
                             <div id="chart-2-3-quantity-scatter" class="chart small"></div>
                         </div>
                     </div>
@@ -1514,6 +1622,10 @@
             <div id="page-2-4" class="page">
                 <div class="page-header">
                     <h1>BC2.4 Lưu chuyển Tiền tệ</h1>
+                </div>
+                <div class="page-instruction">
+                    Quản trị dòng tiền để đảm bảo khả năng thanh toán. Dòng tiền dương từ hoạt động kinh doanh ổn định
+                    là ưu tiên hàng đầu.
                 </div>
                 <div class="kpi-row">
                     <div class="kpi-card">
@@ -1545,10 +1657,14 @@
                 <div class="chart-row">
                     <div class="chart-box">
                         <h3>Biến động dòng tiền</h3>
+                        <p class="chart-subtitle">Tổng hợp các dòng tiền nạp vào và rút ra chính để tính toán Net Cash
+                            Flow trong kỳ.</p>
                         <div id="chart-2-4-waterfall" class="chart"></div>
                     </div>
                     <div class="chart-box">
                         <h3>Biến động dòng tiền theo thời gian</h3>
+                        <p class="chart-subtitle">Dự báo các thời điểm thiếu hụt tiền mặt để chủ động phương án huy động
+                            vốn ngắn hạn.</p>
                         <div id="chart-2-4-cashflow-linebar" class="chart"></div>
                     </div>
                 </div>
@@ -1560,14 +1676,19 @@
                     <div class="chart-row auto">
                         <div class="chart-box">
                             <h3>I. Lưu chuyển tiền từ hoạt động kinh doanh</h3>
+                            <p class="chart-subtitle">Dòng tiền từ hoạt động lõi. Cần theo dõi để đảm bảo thu hồi tiền
+                                từ bán hàng kịp thời.</p>
                             <div id="chart-2-4-operating" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>II. Lưu chuyển tiền từ hoạt động đầu tư</h3>
+                            <p class="chart-subtitle">Phản ánh mức độ đầu tư vào tài sản cố định hoặc các khoản đầu tư
+                                tài chính dài hạn.</p>
                             <div id="chart-2-4-investing" class="chart small"></div>
                         </div>
                         <div class="chart-box">
                             <h3>III. Lưu chuyển tiền từ hoạt động tài chính</h3>
+                            <p class="chart-subtitle">Các hoạt động vay/trả nợ và chi trả cổ tức cho cổ đông.</p>
                             <div id="chart-2-4-financing" class="chart small"></div>
                         </div>
                     </div>
@@ -1579,30 +1700,38 @@
                 <div class="page-header">
                     <h1>BC3.1 Tổng quan Công nợ</h1>
                 </div>
+                <div class="page-instruction">
+                    Theo dõi cân bằng vốn lưu động qua việc đối soát giữa các khoản phải thu (AR) và phải trả (AP). Đảm
+                    bảo dòng tiền thu hồi đủ để đáp ứng các nghĩa vụ nợ đến hạn.
+                </div>
 
                 <!-- Row 1: 4 Charts (1fr 1fr 1fr 1fr) -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; margin-bottom: 22px;">
                     <!-- Chart 1: Gauge AR -->
                     <div class="chart-box">
                         <h3>Phải thu (Tổng: 18.2 tỷ)</h3>
+                        <p class="chart-subtitle">Tiềm năng thu hồi tiền mặt từ khách hàng.</p>
                         <div id="chart-3-1-gauge-ar" class="chart small"></div>
                     </div>
 
                     <!-- Chart 2: Gauge AP -->
                     <div class="chart-box">
                         <h3>Phải trả (Tổng: 15.3 tỷ)</h3>
+                        <p class="chart-subtitle">Nghĩa vụ thanh toán cho nhà cung cấp và các bên liên quan.</p>
                         <div id="chart-3-1-gauge-ap" class="chart small"></div>
                     </div>
 
                     <!-- Chart 3: Pie AR -->
                     <div class="chart-box">
                         <h3>Phải thu: Quá hạn vs Trong hạn</h3>
+                        <p class="chart-subtitle">Cảnh báo sớm rủi ro nợ xấu nếu tỷ lệ quá hạn tăng cao.</p>
                         <div id="chart-3-1-pie-ar" class="chart small"></div>
                     </div>
 
                     <!-- Chart 4: Pie AP -->
                     <div class="chart-box">
                         <h3>Phải trả: Quá hạn vs Trong hạn</h3>
+                        <p class="chart-subtitle">Đánh giá mức độ tuân thủ cam kết thanh toán và uy tín tín dụng.</p>
                         <div id="chart-3-1-pie-ap" class="chart small"></div>
                     </div>
                 </div>
@@ -1612,12 +1741,14 @@
                     <!-- Chart 5: Line Chart -->
                     <div class="chart-box">
                         <h3>Phải thu vs Phải trả (12T)</h3>
+                        <p class="chart-subtitle">So sánh kỳ hạn thu và trả để tối ưu hóa chu kỳ tiền mặt.</p>
                         <div id="chart-3-1-combo" class="chart"></div>
                     </div>
 
                     <!-- Chart 6: Waterfall Chart -->
                     <div class="chart-box">
                         <h3>Dự báo Dòng tiền: Bắt đầu → Thu AR → Trả AP → Kết thúc</h3>
+                        <p class="chart-subtitle">Mô phỏng khả năng chi trả dựa trên dòng tiền thu nợ dự kiến.</p>
                         <div id="chart-3-1-waterfall" class="chart"></div>
                     </div>
                 </div>
@@ -1626,8 +1757,11 @@
             <!-- Page 3.2 -->
             <div id="page-3-2" class="page">
                 <div class="page-header">
-                    <h1>BC3.2 Chi tiết Phải thu &amp; Phải trả</h1>
-                    <p>Phân tích chi tiết tình trạng nợ phải thu và khả năng thanh toán của khách hàng</p>
+                    <h1>BC3.2 Nợ phải thu</h1>
+                    <div class="page-instruction">
+                        Phân tích chi tiết tình trạng nợ phải thu và khả năng thanh toán của khách hàng. Ưu tiên xử lý
+                        các khoản nợ quá hạn có giá trị lớn.
+                    </div>
                 </div>
 
                 <!-- Row 1: 3 Columns (Gauges | Top KH | Tín dụng KH) -->
@@ -1635,11 +1769,14 @@
                     <!-- Column 1: 2 Gauges (Vertical Stack) -->
                     <div class="page-3-2-gauges">
                         <div class="chart-box gauge-card">
-                            <h3>Quick Ratio Hiện tại</h3>
+                            <h3>Tỷ lệ thanh toán nhanh</h3>
+                            <p class="chart-subtitle">Khả năng thanh toán tức thời. Mục tiêu duy trì > 1.0.</p>
                             <div id="chart-3-2-gauge-qr" class="chart gauge-chart"></div>
                         </div>
                         <div class="chart-box gauge-card">
-                            <h3>Tỷ lệ Thu nợ để đạt QR=1.5</h3>
+                            <h3>Tỷ lệ Thu nợ để đạt mức thanh toán nhanh</h3>
+                            <p class="chart-subtitle">Chỉ số dựa vào số lượng nợ đã thu hồi so với tỷ lệ nợ cần thu hồi
+                                để đạt được mức có khả năng thanh toán các khoản nợ ngắn hạn</p>
                             <div id="chart-3-2-gauge-qr-target" class="chart gauge-chart"></div>
                         </div>
                     </div>
@@ -1647,12 +1784,18 @@
                     <!-- Column 2: Top KH Nợ nhiều nhất -->
                     <div class="chart-box bar-chart-card">
                         <h3>Top KH Nợ nhiều nhất (Cần Thu)</h3>
+                        <p class="chart-subtitle">Danh sách các khách hàng cần phải thu hồi nợ để đạt đủ tỷ lệ nợ còn
+                            thiếu để đáp ứng khả năng thanh toán. Danh sách được sắp xếp từ các khách hàng có số lượng
+                            nợ lớn nhất đến nhỏ nhất cho đến khi đủ khoản thu cần.
+                        </p>
                         <div id="chart-3-2-top-customers" class="chart bar-horizontal-large"></div>
                     </div>
 
                     <!-- Column 3: Tín dụng KH -->
                     <div class="chart-box bar-chart-card">
                         <h3>Tín dụng KH (Tỷ lệ Thanh toán Lịch sử)</h3>
+                        <p class="chart-subtitle">Phân loại khách hàng dựa trên lịch sử tuân thủ thời hạn thanh toán.
+                        </p>
                         <div id="chart-3-2-customer-credit" class="chart bar-horizontal-large"></div>
                     </div>
                 </div>
@@ -1662,6 +1805,8 @@
                     <!-- Left: Heatmap -->
                     <div class="chart-box heatmap-card">
                         <h3>Heatmap: KH x Aging Bucket</h3>
+                        <p class="chart-subtitle">Nhận diện các nhóm khách hàng có xu hướng chây ì hoặc gặp khó khăn tài
+                            chính.</p>
                         <div id="chart-3-2-heatmap-customer-aging" class="chart heatmap-chart"></div>
                     </div>
 
@@ -1759,7 +1904,10 @@
             <div id="page-3-3" class="page">
                 <div class="page-header">
                     <h1>BC3.3 Nợ phải trả</h1>
-                    <p>Phân tích chi tiết cơ cấu nợ phải trả và các khoản thanh toán</p>
+                    <div class="page-instruction">
+                        Quản lý mối quan hệ với NCC và tối ưu hóa thời gian chiếm dụng vốn hợp lý mà không gây ảnh hưởng
+                        đến uy tín doanh nghiệp.
+                    </div>
                 </div>
 
                 <!-- Row 1: Pie + Bar with Toggle + Pareto -->
@@ -1767,6 +1915,7 @@
                     <!-- Pie Chart: Nợ ngắn hạn vs Dài hạn -->
                     <div class="chart-box">
                         <h3>Cơ cấu Nợ phải trả</h3>
+                        <p class="chart-subtitle">Tỷ lệ nợ ngắn hạn và dài hạn trong tổng nghĩa vụ trả nợ.</p>
                         <div id="chart-3-3-debt-pie" class="chart" style="height: 320px;"></div>
                     </div>
 
@@ -1781,12 +1930,15 @@
                                     hạn</button>
                             </div>
                         </div>
+                        <p class="chart-subtitle" style="margin-top: -10px; margin-bottom: 10px;">Theo dõi dư nợ theo
+                            từng phân loại (vay ngân hàng, trả NCC, khác). Sử dụng nút gạt để xem nợ ngắn/dài hạn.</p>
                         <div id="chart-3-3-debt-bar" class="chart" style="height: 280px;"></div>
                     </div>
 
                     <!-- Pareto Chart: Top NCC theo dư nợ -->
                     <div class="chart-box">
                         <h3>Top NCC theo Dư nợ (Pareto)</h3>
+                        <p class="chart-subtitle">20% nhà cung cấp chiếm giữ phần lớn dư nợ phải trả.</p>
                         <div id="chart-3-3-pareto" class="chart" style="height: 320px;"></div>
                     </div>
                 </div>
@@ -1796,12 +1948,16 @@
                     <!-- Trend Line Chart -->
                     <div class="chart-box">
                         <h3>Xu hướng Nợ phải trả (6 tháng)</h3>
+                        <p class="chart-subtitle">Kiểm soát tốc độ tăng nợ so với tốc độ tăng trưởng quy mô kinh doanh.
+                        </p>
                         <div id="chart-3-3-trend" class="chart" style="height: 280px;"></div>
                     </div>
 
                     <!-- Aging Bar Chart -->
                     <div class="chart-box">
                         <h3>Aging Nợ phải trả</h3>
+                        <p class="chart-subtitle">Lịch trình thanh toán đến hạn để chủ động kế hoạch dòng tiền chi trả.
+                        </p>
                         <div id="chart-3-3-aging" class="chart" style="height: 280px;"></div>
                     </div>
                 </div>
