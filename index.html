@@ -1035,12 +1035,176 @@
                 flex-direction: column;
             }
         }
+
+        /* Home Page Styles */
+        .home-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .home-section-title {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+
+        .report-overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .report-overview-card {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-overview-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-light);
+        }
+
+        .report-overview-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, transparent 50%, rgba(59, 130, 246, 0.05) 50%);
+        }
+
+        .report-overview-card h3 {
+            font-size: 18px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .report-overview-card p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .analysis-flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .flow-card {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .flow-header {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flow-steps {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px 0;
+            background: #fdfdfd;
+            border-radius: 12px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .step-box {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-size: 13px;
+            color: #334155;
+            position: relative;
+            flex: 1;
+            min-width: 220px;
+            max-width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .step-box:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-box.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.2);
+        }
+
+        .step-arrow {
+            color: var(--primary-light);
+            font-size: 24px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+            user-select: none;
+        }
+
+        .step-box .step-hint {
+            display: block;
+            font-size: 11px;
+            margin-top: 4px;
+            opacity: 0.8;
+            font-style: italic;
+        }
     </style>
 </head>
 
 <body>
     <div class="sidebar">
-        <h2>📊 BÁO CÁO TÀI CHÍNH</h2>
+        <h2 id="sidebar-title" style="cursor: pointer;">📊 BÁO CÁO TÀI CHÍNH</h2>
+
+        <div class="report-group">
+            <div class="report-title">HƯỚNG DẪN</div>
+            <div class="nav-item" data-page="page-home" style="color: #fbbf24; font-weight: 600;">📖 Hướng dẫn sử dụng &
+                Đọc BC</div>
+        </div>
 
         <div class="report-group">
             <div class="report-title">BC1: Tổng quan Tài chính</div>
@@ -1067,8 +1231,124 @@
 
     <div class="main">
         <div class="content-wrapper">
+            <!-- Page Home -->
+            <div id="page-home" class="page active">
+                <div class="page-header">
+                    <h1>Chào mừng bạn đến với Hệ thống Báo cáo Tài chính</h1>
+                    <p>Hệ thống cung cấp cái nhìn toàn diện về sức khỏe tài chính, hiệu quả kinh doanh và tình hình công
+                        nợ của doanh nghiệp.</p>
+                </div>
+
+                <div class="home-container">
+                    <!-- Section 1 -->
+                    <div class="home-section">
+                        <div class="home-section-title">Nội dung cốt lõi</div>
+                        <div class="report-overview-grid">
+                            <div class="report-overview-card">
+                                <h3>📈 BC1: Tài chính</h3>
+                                <p>Tập trung vào cấu trúc tài sản, nguồn vốn và khả năng thanh khoản ngắn hạn. Giúp lãnh
+                                    đạo định vị mức độ an toàn và tự chủ tài chính.</p>
+                            </div>
+                            <div class="report-overview-card">
+                                <h3>💰 BC2: Kinh doanh</h3>
+                                <p>Phân tích doanh thu, chi phí và lợi nhuận. Giúp nhận diện các "điểm nghẽn" trong hoạt
+                                    động vận hành và hiệu quả sử dụng dòng tiền.</p>
+                            </div>
+                            <div class="report-overview-card">
+                                <h3>🤝 BC3: Công nợ</h3>
+                                <p>Quản lý chi tiết các khoản phải thu (AR) và phải trả (AP). Giảm thiểu rủi ro đọng vốn
+                                    khách hàng và duy trì uy tín với nhà cung cấp.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2 -->
+                    <div class="home-section">
+                        <div class="home-section-title">Luồng đọc báo cáo (Workflows)</div>
+                        <div class="analysis-flow-container">
+                            <!-- Luồng 1 -->
+                            <div class="flow-card">
+                                <div class="flow-header">🔄 Luồng 1: Đánh giá sức khỏe thanh khoản</div>
+                                <div class="flow-steps">
+                                    <div class="step-box active">
+                                        <b>Trang 1.1</b>
+                                        <span class="step-hint">Xem Hệ số hiện hành > 1.1?</span>
+                                    </div>
+                                    <div class="step-arrow">➜</div>
+                                    <div class="step-box">
+                                        <b>Trang 1.2</b>
+                                        <span class="step-hint">Kiểm tra Hệ số Tiền mặt & Nhanh</span>
+                                    </div>
+                                    <div class="step-arrow">➜</div>
+                                    <div class="step-box">
+                                        <b>Trang 3.2</b>
+                                        <span class="step-hint">Nếu kẹt ở Phải thu ➔ Lên KH thu nợ</span>
+                                    </div>
+                                </div>
+                                <p
+                                    style="font-size: 13px; color: #475569; margin-top: 20px; line-height: 1.6; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                    <b
+                                        style="color: var(--primary); display: block; margin-bottom: 10px; font-size: 15px;">🔍
+                                        Chi tiết lộ trình:</b>
+                                    1. Đầu tiên, người đọc truy cập <b>Trang 1.1 Dashboard Tổng quan</b> để kiểm tra chỉ
+                                    số "Hệ số thanh toán hiện hành". Nếu chỉ số này đang nằm trên mức an toàn (1.1),
+                                    doanh nghiệp cần xác định các yếu tố duy trì bền vững. Nếu dưới 1.1, cần tìm hiểu
+                                    nguyên nhân cốt lõi thông qua các báo cáo chuyên sâu.<br><br>
+                                    2. Tiếp theo, chuyển sang <b>Trang 1.2 Khả năng thanh toán</b> để phân tích lớp
+                                    phòng thủ thanh khoản: kiểm tra xem "Hệ số thanh toán bằng tiền" có đủ đáp ứng các
+                                    nợ ngắn hạn ngay lập tức không. Nếu chưa đủ, hãy xem xét "Hệ số thanh toán nhanh"
+                                    (bao gồm cả các khoản phải thu).<br><br>
+                                    3. Nếu việc cộng thêm Phải thu giúp hệ số đạt mức an toàn, điều đó khẳng định rằng
+                                    sức khỏe tài chính phụ thuộc hoàn toàn vào việc thu hồi nợ khách hàng. Khi đó, hãy
+                                    sang báo cáo <b>BC3 Quản lý Công nợ</b> để phân tích chi tiết khả năng thu nợ, đánh
+                                    giá rủi ro tín dụng và đề xuất phương án thu hồi hợp lý nhất.
+                                </p>
+                            </div>
+
+                            <!-- Luồng 2 -->
+                            <div class="flow-card">
+                                <div class="flow-header">📉 Luồng 2: Truy tìm nguyên nhân Lợi nhuận giảm</div>
+                                <div class="flow-steps">
+                                    <div class="step-box active">
+                                        <b>Trang 2.1</b>
+                                        <span class="step-hint">So sánh LN với cùng kỳ</span>
+                                    </div>
+                                    <div class="step-arrow">➜</div>
+                                    <div class="step-box">
+                                        <b>Tách nguyên nhân</b>
+                                        <span class="step-hint">Do Doanh thu hay Chi phí?</span>
+                                    </div>
+                                    <div class="step-arrow">➜</div>
+                                    <div class="step-box">
+                                        <b>Trang 2.2 / 2.3</b>
+                                        <span class="step-hint">Phân tích sâu để tìm phương án</span>
+                                    </div>
+                                </div>
+                                <p
+                                    style="font-size: 13px; color: #475569; margin-top: 20px; line-height: 1.6; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                    <b
+                                        style="color: var(--primary); display: block; margin-bottom: 10px; font-size: 15px;">🔍
+                                        Chi tiết lộ trình:</b>
+                                    1. Người đọc bắt đầu tại <b>Trang 2.1 Tổng quan KQKD</b> để đánh giá hiệu quả lợi
+                                    nhuận thông qua việc so sánh với cùng kỳ năm trước. Bước này giúp xác định xu hướng
+                                    lợi nhuận đang tăng trưởng hay sụt giảm so với lịch sử doanh nghiệp.<br><br>
+                                    2. Nếu kết quả sụt giảm (Xấu), cần thực hiện "bóc tách rủi ro": xác định nguyên nhân
+                                    cốt lõi đến từ việc hụt giảm Doanh thu hay do Chi phí vận hành đang tăng quá cao so
+                                    với cùng kỳ.<br><br>
+                                    3. <b>Nếu do Doanh thu:</b> Chuyển sang <b>Trang 2.2 Phân tích Doanh thu</b> để tìm
+                                    hiểu mảng kinh doanh hoặc loại hình sản phẩm nào đang suy yếu. <b>Nếu do Chi
+                                        phí:</b> Chuyển sang <b>Trang 2.3 Phân tích Chi phí</b> để xác định đó là sự
+                                    thay đổi của chi phí cố định hay chi phí biến đổi tăng đột biến, nguyên nhân đến từ
+                                    hạng mục chi phí cụ thể nào để tìm hướng khắc phục kịp thời.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Page 1.1 -->
-            <div id="page-1-1" class="page active">
+            <div id="page-1-1" class="page">
                 <div class="page-header">
                     <h1>BC1.1 Tổng quan tài chính</h1>
                 </div>
