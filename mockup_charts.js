@@ -1,14 +1,33 @@
 // Mockup Charts - Power BI Style với ECharts
 // Navigation
+function switchPage(pageId, navElement = null) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+    if (navElement) {
+        navElement.classList.add('active');
+    }
+
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        setTimeout(() => initCharts(pageId), 100);
+    }
+}
+
 document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', function () {
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        this.classList.add('active');
-        document.getElementById(this.dataset.page).classList.add('active');
-        setTimeout(() => initCharts(this.dataset.page), 100);
+        switchPage(this.dataset.page, this);
     });
 });
+
+// Sidebar title click (Go to Home)
+const sidebarTitle = document.getElementById('sidebar-title');
+if (sidebarTitle) {
+    sidebarTitle.addEventListener('click', () => {
+        switchPage('page-home');
+    });
+}
 
 // Color palette
 const colors = {
@@ -34,7 +53,14 @@ function decoBarLabel(name, val, maxVal) {
 }
 
 // Initialize charts on load
-document.addEventListener('DOMContentLoaded', () => initCharts('page-1-1'));
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if there's a hash or default to home
+    switchPage('page-home');
+
+    // Set initial active state for the guide item if on home
+    const guideItem = document.querySelector('.nav-item[data-page="page-home"]');
+    if (guideItem) guideItem.classList.add('active');
+});
 
 function initCharts(pageId) {
     switch (pageId) {
